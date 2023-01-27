@@ -6,9 +6,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo</title>
     <link rel="stylesheet" href="./resource/style.css">
+    <script src="https://kit.fontawesome.com/682fa468d1.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    
+    <div class="container">
+        <div class="flex-col">
+            <!-- header -->
+            <div class="header flex-row">
+                <div class="logo flex-row">
+                    <i class="logo--icon fa-solid fa-bars"></i>
+                    <h1 class="logo--text">To Do List</h1>
+                </div>
+                  
+                    <ul class="status flex-row">
+                        <li class="status-selected">All</li>
+                        <li>Done</li>
+                        <li>Undone</li>
+                    </ul>
+            </div>
+            <!-- add bar -->
+            <div class="flex-row add-bar">
+                <input type="text" name="input" id="" placeholder="Add a new task">
+                <button class="btn btn-add">Add</button>
+                <button class="btn btn-edit">Edit</button>
+            </div>
+            <!-- tasks -->
+            <div class="tasks">
+                <div class="task flex-row borderLeft--red">
+                    <p class="task__name">todo 1</p>
+                    <div class="action flex-row">
+                        <i class="icon-delete fa-solid fa-trash-can"></i>
+                        <i class="icon-edit fa-solid fa-pen-to-square"></i>
+                    </div>
+                </div>
+
+                <div class="task flex-row borderLeft--green">
+                    <p class="task__name line-through">todo 2</p>
+                    <div class="action flex-row">
+                        <i class="icon-delete fa-solid fa-trash-can"></i>
+                        <i class="icon-edit fa-solid fa-pen-to-square"></i>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
 </body>
 <script src="./resource/script.js"></script>
 </html>
