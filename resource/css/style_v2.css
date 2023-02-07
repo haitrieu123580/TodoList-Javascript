@@ -1,0 +1,192 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family:'Plus Jakarta Sans', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+}
+:root{
+    --color-blue:#00A6DA;
+    --color-yellow:rgba(204, 172, 3, 0.56);
+    --color--green:#3BC057;
+    --color-light-blue:#00CDDA;
+    --color-light-yellow:#DAB700;
+    --color-light-green:#69CE7E;
+    --color-light-grey:#5A5C63;
+
+}
+
+#container{
+    padding: 1em 15em;
+}
+.row{
+    display: flex;
+    flex-direction: row;
+}
+/* css for logo */
+header{
+    margin-bottom: 10px;
+    justify-content: space-between;
+}
+.logo--text{
+    font-size: 14px;
+    color: var(--color-light-grey);
+}
+.btn-add{
+    align-items: center;
+    color: var(--color-light-grey);
+}
+.btn-add *{
+    margin-left: 5px;
+}
+/* css for tasks */
+.tasks{
+    width: 33.33%;
+    margin-right: 3em;
+    display: flex;
+    flex-direction: column;
+}
+.tasks:last-child{
+    margin-right: 0;
+}
+.tasks:nth-child(1) .tasks-status{
+    background-color: var(--color-blue);
+}
+.tasks:nth-child(2) .tasks-status{
+    background-color: var(--color-yellow);
+}
+.tasks:nth-child(3) .tasks-status{
+    background-color: var(--color--green);
+}
+.tasks-status{
+    position: relative;
+    margin-bottom: 2em;
+    color: #fff;
+    border-radius: 3px;
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.tasks-status::after{
+    content: "";
+    position: absolute;
+    top: 150%;
+    left: 0;
+    z-index: 1;
+    background-color: var(--color-blue);
+    width: 100%;
+    height: 2px;
+}
+.tasks:nth-child(2) .tasks-status::after{
+    background-color: var(--color-yellow);
+}
+.tasks:nth-child(3) .tasks-status::after{
+    background-color: var(--color--green);
+}
+.tasks-status span{
+    display: block;
+    width: 20px;
+    height: 100%;
+    text-align: center;
+    border-radius: 20%;
+}
+.tasks:nth-child(1) .tasks-status span{
+    background-color: var(--color-light-blue);
+}
+.tasks:nth-child(2) .tasks-status span{
+    background-color: var(--color-light-yellow);
+}
+.tasks:nth-child(3) .tasks-status span{
+    background-color: var(--color-light-green);
+}
+/* css for task */
+.task{
+    padding: 10px 10px;
+    box-shadow: 1px 1px 2px 1px #DBDBDB;
+    margin-bottom: 20px;
+}
+.task-info{
+    position: relative;
+    width: 70%;
+    margin-bottom: 20px;
+}
+.task-info::after{
+    content: "";
+    position: absolute;
+    top: 120%;
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px solid #DBDBDB;
+    
+}
+.task-action{
+   width: 30%;
+   justify-content: flex-end;
+}
+.task-action i{
+    margin-left: 5px;
+}
+.task-category{
+    font-size: 12px;
+    color: blue;
+    text-decoration: underline;
+}
+.task-title{
+    margin-top: 5px;
+    font-weight: 600;
+}
+.task-content,.task-time{
+    font-size: 11px;
+    color: #5A5C63;
+    margin-top: 10px;
+}
+/* css form */
+.bg-filter{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-light-grey);
+    z-index: 98;
+    visibility: visible;
+    opacity: 0.5;
+    display: none;
+}
+.form{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    z-index: 99;
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    padding: 5em;
+    background-color: #fff;
+    border-radius: 5px;
+    display: none;
+}
+.form input,.form button,.form textarea{
+    margin-top: 10px;
+}
+.form-title h1{
+    display: block;
+    margin: 0 auto;
+}
+.form-title h1,.form-title i{
+    font-size: 20px;
+}
+
+.choose-status{
+    display: none;
+    justify-content: space-around;
+    align-items:flex-end;
+    
+}
+.visible{
+    display: inline-flex;
+}
+#btn-edit{
+    display: none;
+}
