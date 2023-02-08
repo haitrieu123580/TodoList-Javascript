@@ -1,3 +1,21 @@
+
+// show edit form
+const btnEdit = document.querySelector(".btn-edit"),
+    btnDel = document.querySelector(".btn-delete"),
+    btnAdd = document.querySelector(".btn-add"),
+    form = document.querySelector(".form"),
+    choose = document.querySelector(".choose-status"),
+    formTitle = document.querySelector(".form-title h1"),
+    todoTasks = document.querySelector(".tasks--todo"),
+    doingTasks = document.querySelector(".tasks--doing"),
+    finishedTasks = document.querySelector(".tasks--finished"),
+    todoNumber = document.querySelector(".tasks:nth-child(1) .tasks-status span"),
+    doingNumber = document.querySelector(".tasks:nth-child(2) .tasks-status span"),
+    finishedNumber = document.querySelector(".tasks:nth-child(3) .tasks-status span");
+var categoryTxt = document.getElementById("category"),
+    titleTxt = document.getElementById("title"),
+    contentTxt = document.getElementById("content"),
+    status = document.querySelectorAll(".status");
 function showForm() {
     let bg = document.querySelector(".bg-filter")
     let form = document.querySelector(".form")
@@ -14,54 +32,7 @@ function closeForm() {
     categoryTxt.value = "";
     titleTxt.value = ""
     contentTxt.value = ""
-    btnSave.style.display = "none"
-    btnSubmit.style.display ="block"
-
 }
-// show edit form
-const btnEdit = document.querySelector(".btn-edit"),
-    btnDel = document.querySelector(".btn-delete"),
-    form = document.querySelector(".form"),
-    choose = document.querySelector(".choose-status"),
-    formTitle = document.querySelector(".form-title h1"),
-    todoTasks = document.querySelector(".tasks--todo"),
-    doingTasks = document.querySelector(".tasks--doing"),
-    finishedTasks = document.querySelector(".tasks--finished"),
-    todoNumber = document.querySelector(".tasks:nth-child(1) .tasks-status span"),
-    doingNumber = document.querySelector(".tasks:nth-child(2) .tasks-status span"),
-    finishedNumber = document.querySelector(".tasks:nth-child(3) .tasks-status span");
-// var categoryTxt = document.getElementById("category"),
-//     titleTxt = document.getElementById("title"),
-//     contentTxt = document.getElementById("content"),
-//     status = document.querySelectorAll(".status")
-
-// const data = [
-//     {
-//         id: 0,
-//         category: 'bbb',
-//         title: 'bbb',
-//         content: 'bbb',
-//         status: 'todo',
-//         date: new Date()
-//     },
-//     {
-//         id: 1,
-//         category: 'ccc',
-//         title: 'ccc',
-//         content: 'ccc',
-//         status: 'doing',
-//         date: new Date()
-//     },
-//     {
-//         id: 2,
-//         category: 'aaa',
-//         title: 'aaa',
-//         content: 'aaa',
-//         status: 'finished',
-//         date: new Date()
-//     }
-// ]
-// localStorage.setItem("tasks", JSON.stringify(data))
 const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
 
 // get tasks by status
@@ -88,7 +59,6 @@ function getAllTasks() {
     return tasks
 }
 // show taskes
-// !
 function insertTaskHTML(task) {
 
     let taskHTML = ` <div class="task">
@@ -152,123 +122,79 @@ function deleteTask(taskId) {
     }
     showTasks()
 }
-// add new task
-
-
 const btnSubmit = document.querySelector("#btn-submit");
-const btnSave = document.querySelector("#btn-edit")
-btnSubmit.addEventListener("click", () => {
-    var categoryTxt = document.getElementById("category").value.trim(),
-    titleTxt = document.getElementById("title").value.trim(),
-    contentTxt = document.getElementById("content").value.trim();
-    if (categoryTxt.value = "" || titleTxt.value == "" || contentTxt.value == "") {
-        alert()
-    }
-    else{
-        let newTask = {
-            id: tasks.length,
-            category: categoryTxt,
-            title: titleTxt,
-            content: contentTxt,
-            status: 'todo',
-            date: new Date()
-        }
-        tasks.push(newTask)
-        localStorage.setItem("tasks", JSON.stringify(tasks))
-        showTasks()
-    }  // add
-
-    
+btnAdd.addEventListener("click", () => {
+    showEditForm("")
 })
 
 function showEditForm(taskId) {
     showForm()
-    formTitle.innerHTML = "Edit todo"
-    choose.classList.add("visible")
-    let editTask = tasks.find(item => item.id == taskId)
-    document.getElementById("category").value = editTask.category
-    document.getElementById("title").value = editTask.title
-    document.getElementById("content").value = editTask.content
-    var ele = document.querySelectorAll('.choose-status input');
-    for (i = 0; i < ele.length; i++) {
+    if (taskId !== "") {
+        formTitle.innerHTML = "Edit todo"
+        choose.classList.add("visible")
+        let editTask = tasks.find(item => item.id == taskId)
+        document.getElementById("category").value = editTask.category
+        document.getElementById("title").value = editTask.title
+        document.getElementById("content").value = editTask.content
+        var ele = document.querySelectorAll('.choose-status input');
+        for (i = 0; i < ele.length; i++) {
+            if (ele[i].type = "radio") {
 
-        if (ele[i].type = "radio") {
+                if (ele[i].value == editTask.status) {
+                    ele[i].checked = true
+                }
 
-            if (ele[i].value == editTask.status) {
-                ele[i].checked = true
             }
-
         }
     }
-    btnSubmit.style.display = "none"
-    btnSave.style.display ="block"
-    btnSave.addEventListener("click",() =>{
-        let task = tasks.find(task => task.id == taskId)
-                task.category = document.getElementById("category").value.trim();
-                task.title = document.getElementById("title").value.trim();
-                task.content = document.getElementById("content").value.trim();
-                task.date = new Date();
-                if (document.getElementById('todo').checked) {
-        
-                    task.status = document.getElementById('todo').value;
-                }
-                else if (document.getElementById('doing').checked) {
-                    console.log(document.getElementById('doing').value)
-                    task.status = document.getElementById('doing').value;
-                }
-                else if (document.getElementById('finished').checked) {
-                    task.status = document.getElementById('finished').value;
-                }
-                
-        
-            
-            localStorage.setItem("tasks", JSON.stringify(tasks))
-            showTasks();
+
+
+    btnSubmit.addEventListener("click", () => {
+        addUpdate(taskId)
     })
 }
-// function addUpdate(taskId) {
-//     console.log(taskId)
-//     categoryTxt.value.trim();
-//     titleTxt.value.trim();
-//     contentTxt.value.trim();
-//     if (categoryTxt.value = "" || titleTxt.value == "" || contentTxt.value == "") {
-//         alert()
-//     }
-//     if (taskId == "") {
-//         // add
-//         let newTask = {
-//             id: tasks.length,
-//             category: categoryTxt,
-//             title: titleTxt,
-//             content: contentTxt,
-//             status: 'todo',
-//             date: new Date()
-//         }
-//         tasks.push(newTask)
+function addUpdate(taskId) {
+    if (document.getElementById("category").value.trim() == "" || document.getElementById("title").value.trim() == "" || document.getElementById("content").value.trim() == "") {
+        alert()
+    }
 
-//     }
-//     else {
-//         // update
-//         // find task has the id
-//         let task = tasks.find(task => task.id == taskId)
-//         task.category = categoryTxt.value.trim();
-//         task.title = titleTxt.value.trim();
-//         task.content = contentTxt.value.trim();
-//         task.date = new Date();
-//         if (document.getElementById('todo').checked) {
+    else {
+        let date  = new Date();
+        if (taskId !== "") {
+            let task = tasks.find(task => task.id == taskId)
+            task.category = document.getElementById("category").value.trim();
+            task.title = document.getElementById("title").value.trim();
+            task.content = document.getElementById("content").value.trim();
+            task.date = `${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()}`
+            if (document.getElementById('todo').checked) {
 
-//             task.status = document.getElementById('todo').value;
-//         }
-//         else if (document.getElementById('doing').checked) {
-//             console.log(document.getElementById('doing').value)
-//             task.status = document.getElementById('doing').value;
-//         }
-//         else if (document.getElementById('finished').checked) {
-//             task.status = document.getElementById('finished').value;
-//         }
-        
+                task.status = document.getElementById('todo').value;
+            }
+            else if (document.getElementById('doing').checked) {
+                console.log(document.getElementById('doing').value)
+                task.status = document.getElementById('doing').value;
+            }
+            else if (document.getElementById('finished').checked) {
+                task.status = document.getElementById('finished').value;
+            }
+            localStorage.setItem("tasks", JSON.stringify(tasks))
+            showTasks();
+        }
+        else if (taskId === "") {
+            let newTask = {
+                id: tasks.length,
+                category: document.getElementById("category").value.trim(),
+                title: document.getElementById("title").value.trim(),
+                content: document.getElementById("content").value.trim(),
+                status: 'todo',
+                date: `${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()}`
+            }
+            tasks.push(newTask)
+            localStorage.setItem("tasks", JSON.stringify(tasks))
+            showTasks()
+        }
+    }
 
-//     }
-//     localStorage.setItem("tasks", JSON.stringify(tasks))
-//     showTasks();
-// }
+
+}
+
