@@ -45,6 +45,8 @@ header{
     margin-right: 3em;
     display: flex;
     flex-direction: column;
+    height: 700px;
+    overflow-y: auto;
 }
 .tasks:last-child{
     margin-right: 0;
