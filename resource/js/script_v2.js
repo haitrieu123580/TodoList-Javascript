@@ -16,25 +16,14 @@ var categoryTxt = document.getElementById("category"),
     titleTxt = document.getElementById("title"),
     contentTxt = document.getElementById("content"),
     status = document.querySelectorAll(".status");
+let isUpdate = false, updateId;
 function showForm() {
     let bg = document.querySelector(".bg-filter")
     let form = document.querySelector(".form")
     bg.classList.add("visible")
     form.classList.add("visible")
 }
-function closeForm() {
-    let bg = document.querySelector(".bg-filter")
-    let form = document.querySelector(".form")
-    bg.classList.remove("visible")
-    form.classList.remove("visible")
-    formTitle.innerHTML = "Add new todo"
-    choose.classList.remove("visible")
-    categoryTxt.value = "";
-    titleTxt.value = ""
-    contentTxt.value = ""
-}
 const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-
 // get tasks by status
 function getTodoTasks() {
     if (!tasks) return;
@@ -59,7 +48,7 @@ function getAllTasks() {
     return tasks
 }
 // show taskes
-function insertTaskHTML(task) {
+function insertTaskHTML(task,id) {
 
     let taskHTML = ` <div class="task">
     <div class="task-top row">
@@ -70,8 +59,8 @@ function insertTaskHTML(task) {
             </div>
         </div>
         <div class="task-action row">
-            <i class="fa-solid fa-pen btn-edit" onclick="showEditForm(${task.id})"></i>
-            <i class="fa-solid fa-trash btn-delete"onclick="deleteTask(${task.id})" ></i>
+            <i class="fa-solid fa-pen btn-edit" onclick="updateTask(${id},'${task.category}','${task.title}','${task.content}','${task.status}')"></i>
+            <i class="fa-solid fa-trash btn-delete"onclick="deleteTask(${id})" ></i>
         </div>
     </div>
     <div class="task-bottom">
@@ -99,102 +88,115 @@ function insertTaskHTML(task) {
 }
 function showTasks() {
     document.querySelectorAll(".task").forEach(task => task.remove())
-    let tasksList = getAllTasks();
-    tasksList.forEach(insertTaskHTML)
+    tasks.forEach((task, id) =>{
+        insertTaskHTML(task,id)
+    })
     todoNumber.innerText = getTodoTasks().length
     doingNumber.innerText = getDoingTasks().length
     finishedNumber.innerText = getFinishedTasks().length
 }
 showTasks()
-
-// delete task 
 function deleteTask(taskId) {
-    var index;
-    for (let i = 0; i < tasks.length; i++) {
-        if (tasks[i].id == taskId) {
-            index = i;
-            break;
-        }
-    }
-    if (index != -1) {
-        tasks.splice(index, 1)
+        tasks.splice(taskId, 1)
         localStorage.setItem("tasks", JSON.stringify(tasks))
-    }
-    showTasks()
+       showTasks()
 }
 const btnSubmit = document.querySelector("#btn-submit");
+// !
 btnAdd.addEventListener("click", () => {
     showEditForm("")
 })
+let engine = (id) => {
+    if (id.value.trim() === "") {
+        id.style.border = "1px solid red";
+        return false
+    } else {
 
-function showEditForm(taskId) {
+        id.style.border = "1px solid green";
+        return true
+    }
+};
+function resetForm() {
+    document.getElementById("category").value = "";
+    document.getElementById("title").value = ""
+    document.getElementById("content").value = ""
+    document.getElementById("title").style.border = "1px solid black"
+    document.getElementById("category").style.border = "1px solid black"
+    document.getElementById("content").style.border = "1px solid black"
+}
+function closeForm() {
+    resetForm()
+    isUpdate = false
+    let bg = document.querySelector(".bg-filter")
+    let form = document.querySelector(".form")
+    bg.classList.remove("visible")
+    form.classList.remove("visible")
+    formTitle.innerHTML = "Add new todo"
+    choose.classList.remove("visible")
+}
+function showEditForm(taskId,category, title, content,status) {
     showForm()
     if (taskId !== "") {
         formTitle.innerHTML = "Edit todo"
         choose.classList.add("visible")
-        let editTask = tasks.find(item => item.id == taskId)
-        document.getElementById("category").value = editTask.category
-        document.getElementById("title").value = editTask.title
-        document.getElementById("content").value = editTask.content
+        document.getElementById("category").value =category
+        document.getElementById("title").value = title
+        document.getElementById("content").value = content
         var ele = document.querySelectorAll('.choose-status input');
         for (i = 0; i < ele.length; i++) {
             if (ele[i].type = "radio") {
 
-                if (ele[i].value == editTask.status) {
+                if (ele[i].value == status) {
                     ele[i].checked = true
                 }
 
             }
         }
     }
-
-
-    btnSubmit.addEventListener("click", () => {
-        addUpdate(taskId)
-    })
 }
-function addUpdate(taskId) {
-    if (document.getElementById("category").value.trim() == "" || document.getElementById("title").value.trim() == "" || document.getElementById("content").value.trim() == "") {
-        alert()
-    }
-
-    else {
-        let date  = new Date();
-        if (taskId !== "") {
-            let task = tasks.find(task => task.id == taskId)
-            task.category = document.getElementById("category").value.trim();
-            task.title = document.getElementById("title").value.trim();
-            task.content = document.getElementById("content").value.trim();
-            task.date = `${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()}`
-            if (document.getElementById('todo').checked) {
-
-                task.status = document.getElementById('todo').value;
-            }
-            else if (document.getElementById('doing').checked) {
-                console.log(document.getElementById('doing').value)
-                task.status = document.getElementById('doing').value;
-            }
-            else if (document.getElementById('finished').checked) {
-                task.status = document.getElementById('finished').value;
-            }
-            localStorage.setItem("tasks", JSON.stringify(tasks))
-            showTasks();
-        }
-        else if (taskId === "") {
-            let newTask = {
-                id: tasks.length,
-                category: document.getElementById("category").value.trim(),
-                title: document.getElementById("title").value.trim(),
-                content: document.getElementById("content").value.trim(),
-                status: 'todo',
-                date: `${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()}`
-            }
-            tasks.push(newTask)
-            localStorage.setItem("tasks", JSON.stringify(tasks))
-            showTasks()
-        }
-    }
-
+function updateTask(taskId,category,title,content, status) {
+    console.log(taskId)
+    updateId = taskId;
+    isUpdate = true;
+    showEditForm(taskId,category,title,content, status)
 
 }
 
+btnSubmit.addEventListener("click", (e) => {
+    e.preventDefault()
+    var isTrue1 = engine(document.getElementById("category")),
+        isTrue2 = engine(document.getElementById("title")), isTrue3 = engine(document.getElementById("content"))
+    // is valid
+    
+    if (isTrue1 && isTrue2 && isTrue3) {
+        let date = new Date()
+        let newTask = {
+            // id: tasks.length,
+            category: document.getElementById("category").value.trim(),
+            title: document.getElementById("title").value.trim(),
+            content: document.getElementById("content").value.trim(),
+            status: 'todo',
+            date: `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
+        }
+
+       if(!isUpdate){
+        tasks.push(newTask)
+       } 
+       else{
+        isUpdate = false
+        if (document.getElementById('todo').checked) {
+            newTask.status = document.getElementById('todo').value;
+        }
+        else if (document.getElementById('doing').checked) {
+            newTask.status = document.getElementById('doing').value;
+        }
+        else if (document.getElementById('finished').checked) {
+            newTask.status = document.getElementById('finished').value;
+        }
+        tasks[updateId] = newTask
+       }
+       localStorage.setItem("tasks",JSON.stringify(tasks))
+       showTasks();
+       closeForm();
+    }
+})
